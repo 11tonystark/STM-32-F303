@@ -277,9 +277,9 @@ char motor;
 
 
 				// dp=d;
-			     if(d=='a')
+			     if(d=='n')
 				{
-
+                    motor= uartreceive();
 
 			    	 GPIO_SetBits(GPIOE,GPIO_Pin_8);
 			    	 if(motor=='E')
@@ -296,13 +296,32 @@ char motor;
 					//continue;
 				}
 
+			    	 	else if(motor=='G')
+			    	 			{//pitch f
+			    	 				GPIO_SetBits(GPIOA,GPIO_Pin_6);//direc
+			    	 				GPIO_SetBits(GPIOA,GPIO_Pin_7);//gpio
+			    	 			}
+			    	 		else if(motor=='H')
+			    	 			{//pitch  b
+			    	 				GPIO_SetBits(GPIOA,GPIO_Pin_6);//dirc
+			    	 				GPIO_ResetBits(GPIOA,GPIO_Pin_7);//gpio
+			    	 			}
+			    	 		else if(motor=='I')
+			    	 			{//roll  f
+			    	 			Stopthearm();
+			    	 			}
+			    	 		else if(motor=='J')
+			    	 			{//roll  b
+			    	 			Stopthearm();
+			    	 			}
+
 			    	 }
 				else
 					{
-					 Stopthearm();
+					 //Stopthearm();
 					 GPIO_ResetBits(GPIOE,GPIO_Pin_8);
-				//	void DCServostop();
-						continue;
+				//	 DCServostop();
+					// continue;
 
 					}
 

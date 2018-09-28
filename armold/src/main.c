@@ -41,7 +41,7 @@ void gpioinit()
 
 		//SET GPIO PIN 10, 12, 13 as output pins
 		GPIO_InitTypeDef GPIO_InitStruct;
-		GPIO_InitStruct.GPIO_Pin = GPIO_Pin_8| GPIO_Pin_9| GPIO_Pin_10;
+		GPIO_InitStruct.GPIO_Pin = GPIO_Pin_8;
 		GPIO_InitStruct.GPIO_Mode = GPIO_Mode_OUT;
 		GPIO_InitStruct.GPIO_Speed = GPIO_Speed_50MHz;
 		GPIO_InitStruct.GPIO_OType = GPIO_OType_PP;
@@ -247,36 +247,35 @@ void armcode( char motor)
 			GPIO_SetBits(GPIOA,GPIO_Pin_8);//direc
 			GPIO_ResetBits(GPIOA,GPIO_Pin_9);//gpio
 		}
-//	else if(motor=='K')
+	//else if(motor=='K')
 	//{
 		//Stopthearm();
 		//GPIO_SetBits(GPIOE,GPIO_Pin_9);
 
-	//	}
+		//}/
 
 	else
 			{
-		DCServostop();
+		Stopthearm();
+	//	DCServostop();
 			}
 }
 
 
 int main(void)
 {
-	int cnt=0;
-	char dp;
 //int d=0;
-char d;
+char armparity;
 	gpioinit();
 	UART_Init();
 	// Stopthearm();
 	while(1)
 	{
-		 d=USART_ReceiveData(UART4);
+		 armparity=USART_ReceiveData(UART4);
 		// dp=d;
-	     if(d=='a')
+	     if(armparity=='n')
 		{
-	    	// Stopthearm();
+	    	 Stopthearm();
 	    	// dp=d;
 			GPIO_SetBits(GPIOE,GPIO_Pin_8);
 	//
@@ -287,26 +286,14 @@ char d;
 
 		else
 			{
-			 Stopthearm();
-			 GPIO_ResetBits(GPIOE,GPIO_Pin_8);
+			//DCServostop();
+		//	Stopthearm();
+			GPIO_ResetBits(GPIOE,GPIO_Pin_8);
 		//	void DCServostop();
 				continue;
 
 			}
-	  /*   if(dp==d)
-	     		{
-	     			cnt++;
-	     			if(cnt>1000)
-	     			{
-	     				Stopthearm();
-	     				continue;
-	     			}
-	     		}
-	     		else
-	     		{
-	     			cnt=0;
-	     		}
-*/
+
 	}
 }
 
