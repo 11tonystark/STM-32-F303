@@ -8,7 +8,7 @@ void Delay(int time)
 {
 	volatile int i,j;
 
-	time = time*1000; ///milli ko sec but input par depend karega
+	time = time*50; ///milli ko sec but input par depend karega
 	for (i=0;i<time;i++)
 		j++;
 }
@@ -20,7 +20,7 @@ int uartreceive()
 	while(!USART_GetFlagStatus(UART4, USART_FLAG_RXNE))
 	{
 		cnt++;
-		if(cnt>20000)
+		if(cnt>2000)
 			break;
 	}
 	return USART_ReceiveData(UART4);
@@ -30,7 +30,10 @@ void Stopthearm(void)
 {
 
 	GPIO_ResetBits(GPIOA,GPIO_Pin_0 | GPIO_Pin_1 | GPIO_Pin_2 | GPIO_Pin_3 | GPIO_Pin_4 | GPIO_Pin_5 | GPIO_Pin_6 | GPIO_Pin_7 );
+
+	GPIO_ResetBits(GPIOE,GPIO_Pin_10 | GPIO_Pin_11 | GPIO_Pin_12 | GPIO_Pin_13 | GPIO_Pin_8 );
 }
+
 
 
 void gpioinit()
@@ -41,7 +44,7 @@ void gpioinit()
 
 		//SET GPIO PIN 10, 12, 13 as output pins
 		GPIO_InitTypeDef GPIO_InitStruct;
-		GPIO_InitStruct.GPIO_Pin = GPIO_Pin_8| GPIO_Pin_9| GPIO_Pin_10;
+		GPIO_InitStruct.GPIO_Pin = GPIO_Pin_10| GPIO_Pin_11| GPIO_Pin_12| GPIO_Pin_13| GPIO_Pin_8;
 		GPIO_InitStruct.GPIO_Mode = GPIO_Mode_OUT;
 		GPIO_InitStruct.GPIO_Speed = GPIO_Speed_50MHz;
 		GPIO_InitStruct.GPIO_OType = GPIO_OType_PP;
@@ -49,7 +52,7 @@ void gpioinit()
 
 		// Initialization of GPIO PORT E Pin 10, 13 and Pin 12
 		GPIO_Init(GPIOE,&GPIO_InitStruct);
-		GPIO_ResetBits(GPIOE,GPIO_Pin_8 | GPIO_Pin_9 | GPIO_Pin_10);
+	//	GPIO_ResetBits(GPIOE,GPIO_Pin_8 | GPIO_Pin_9 | GPIO_Pin_10);
 
 	//Enable clock for GPIOA
 	RCC_AHBPeriphClockCmd(RCC_AHBPeriph_GPIOA,ENABLE);
@@ -263,9 +266,7 @@ void armcode( char motor)
 
 int main(void)
 {
-	int cnt=0;
-	char dp;
-//int d=0;
+
 char d;
 char motor;
 	gpioinit();
@@ -296,15 +297,15 @@ char motor;
 					//continue;
 			     	}
 
-			    	 	else if(motor=='G')
+			    	 	else if(motor=='C')
 			    	 			{//pitch f
-			    	 				GPIO_SetBits(GPIOA,GPIO_Pin_6);//direc
-			    	 				GPIO_SetBits(GPIOA,GPIO_Pin_7);//gpio
+			    	 				GPIO_SetBits(GPIOA,GPIO_Pin_2);//direc
+			    	 				GPIO_SetBits(GPIOA,GPIO_Pin_3);//gpio
 			    	 			}
-			    	 		else if(motor=='H')
+			    	 		else if(motor=='D')
 			    	 			{//pitch  b
-			    	 				GPIO_SetBits(GPIOA,GPIO_Pin_6);//dirc
-			    	 				GPIO_ResetBits(GPIOA,GPIO_Pin_7);//gpio
+			    	 				GPIO_SetBits(GPIOA,GPIO_Pin_2);//dirc
+			    	 				GPIO_ResetBits(GPIOA,GPIO_Pin_3);//gpio
 			    	 			}
 			    	 		else if(motor=='E')
 			     				{//roll  f
@@ -328,10 +329,10 @@ char motor;
 			    	 }
 				else
 					{
-					 //Stopthearm();
+					// Stopthearm();
 					 GPIO_ResetBits(GPIOE,GPIO_Pin_8);
 				//	 DCServostop();
-					// continue;
+					// break;
 
 					}
 

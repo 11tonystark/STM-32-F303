@@ -4,18 +4,13 @@
 #include "stm32f3_discovery.h"
 #include <time.h>
 
-void delay(int delay)
-{
- int now=time(NULL);
- int later=now+delay;
- while(now<=later)now=time(NULL);
-}
+
 
 void Delay(int time)
 {
 	volatile int i,j;
 
-	time = time*10;
+	time = time*50;
 	for (i=0;i<time;i++)
 		j++;
 }
@@ -38,7 +33,7 @@ int uartreceive()
 	while(!USART_GetFlagStatus(UART4, USART_FLAG_RXNE))
 	{
 		cnt++;
-		if(cnt>2000)
+		if(cnt>200000)
 			break;
 	}
 	return USART_ReceiveData(UART4);
@@ -59,11 +54,11 @@ void gpioinit()
 
 		//SET GPIO PIN 10, 12, 13 as output pins
 		GPIO_InitTypeDef GPIO_InitStruct;
-		GPIO_InitStruct.GPIO_Pin = GPIO_Pin_10| GPIO_Pin_11| GPIO_Pin_12| GPIO_Pin_13;
+		GPIO_InitStruct.GPIO_Pin = GPIO_Pin_10| GPIO_Pin_11| GPIO_Pin_12| GPIO_Pin_13| GPIO_Pin_8;
 		GPIO_InitStruct.GPIO_Mode = GPIO_Mode_OUT;
 		GPIO_InitStruct.GPIO_Speed = GPIO_Speed_50MHz;
 		GPIO_InitStruct.GPIO_OType = GPIO_OType_PP;
-		GPIO_InitStruct.GPIO_PuPd = GPIO_PuPd_NOPULL;
+		GPIO_InitStruct.GPIO_PuPd = GPIO_PuPd_UP;
 
 		// Initialization of GPIO PORT E Pin 10, 13 and Pin 12
 		GPIO_Init(GPIOE,&GPIO_InitStruct);
@@ -309,72 +304,63 @@ char motor;
 			    	 GPIO_SetBits(GPIOE,GPIO_Pin_8);
 			    	 if(motor=='G')//E
 			    	 {
-			    	 		 //linear act, f
-			    		 GPIO_SetBits(GPIOE,GPIO_Pin_10);
-			    	 	GPIO_ResetBits(GPIOE,GPIO_Pin_11);
+			    	 		 //clockwise lag fast
+				GPIO_SetBits(GPIOE,GPIO_Pin_10);
+			   	 	GPIO_ResetBits(GPIOE,GPIO_Pin_11);
 			    	   	 GPIO_ResetBits(GPIOE,GPIO_Pin_12);
 			          	 GPIO_ResetBits(GPIOE,GPIO_Pin_13);
-			    		                  	Delay(20);
+			    		                  	Delay(1);
 
-			    		                  	GPIO_ResetBits(GPIOE,GPIO_Pin_10);
-			    		                  	GPIO_ResetBits(GPIOE,GPIO_Pin_11);
-			    		                  	GPIO_SetBits(GPIOE,GPIO_Pin_12);
-			    		                   GPIO_ResetBits(GPIOE,GPIO_Pin_13);
+			     	GPIO_ResetBits(GPIOE,GPIO_Pin_10);
+			      	GPIO_ResetBits(GPIOE,GPIO_Pin_11);
+			       	GPIO_SetBits(GPIOE,GPIO_Pin_12);
+			        GPIO_ResetBits(GPIOE,GPIO_Pin_13);
 
-			    		               	Delay(20);
+			 	               	Delay(1);
 
-			    		                   	GPIO_ResetBits(GPIOE,GPIO_Pin_10);
-			    		                   	GPIO_SetBits(GPIOE,GPIO_Pin_11);
-			    		                   	GPIO_ResetBits(GPIOE,GPIO_Pin_12);
-			    		                   	GPIO_ResetBits(GPIOE,GPIO_Pin_13);
+			       	GPIO_ResetBits(GPIOE,GPIO_Pin_10);
+			       	GPIO_SetBits(GPIOE,GPIO_Pin_11);
+			       	GPIO_ResetBits(GPIOE,GPIO_Pin_12);
+			       	GPIO_ResetBits(GPIOE,GPIO_Pin_13);
 
-			    		                	Delay(20);
+			                 	Delay(1);
 
-			    		                   	GPIO_ResetBits(GPIOE,GPIO_Pin_10);
-			    		                   	GPIO_ResetBits(GPIOE,GPIO_Pin_11);
-			    		                   GPIO_ResetBits(GPIOE,GPIO_Pin_12);
-			    		               	GPIO_SetBits(GPIOE,GPIO_Pin_13);
+			       	GPIO_ResetBits(GPIOE,GPIO_Pin_10);
+			  	GPIO_ResetBits(GPIOE,GPIO_Pin_11);
+			     GPIO_ResetBits(GPIOE,GPIO_Pin_12);
+			  	GPIO_SetBits(GPIOE,GPIO_Pin_13);
 
-			    		            	Delay(20);
-
-
+			 	            	Delay(1);
 
 			    	 }
 
-			    	 	else if(motor=='H')//F
-			    	 		{//linear act.  b
+			    	 	else if(motor=='H')//
+			    	 		{//clock wise zero lag slow
+			               	GPIO_ResetBits(GPIOE,GPIO_Pin_10);
+			               	GPIO_ResetBits(GPIOE,GPIO_Pin_11);
+			                 GPIO_ResetBits(GPIOE,GPIO_Pin_12);
+			                 	GPIO_SetBits(GPIOE,GPIO_Pin_13);
+			    		            	Delay(10);
 
-		                   	GPIO_ResetBits(GPIOE,GPIO_Pin_10);
-		                   	GPIO_ResetBits(GPIOE,GPIO_Pin_11);
-		                   GPIO_ResetBits(GPIOE,GPIO_Pin_12);
-		               	GPIO_SetBits(GPIOE,GPIO_Pin_13);
+                                         	GPIO_ResetBits(GPIOE,GPIO_Pin_10);
+ 			    		                   	GPIO_SetBits(GPIOE,GPIO_Pin_11);
+  			    		                   	GPIO_ResetBits(GPIOE,GPIO_Pin_12);
+			    		                   	GPIO_ResetBits(GPIOE,GPIO_Pin_13);
+	    		                	Delay(10);
+   		                  	GPIO_SetBits(GPIOE,GPIO_Pin_10);
+                  	GPIO_ResetBits(GPIOE,GPIO_Pin_11);
+                 	GPIO_ResetBits(GPIOE,GPIO_Pin_12);
+			         GPIO_ResetBits(GPIOE,GPIO_Pin_13);
+ 			    		               	Delay(10);
 
-		            	Delay(43);
+	       			    	    	 		 //linear act, f
+   					GPIO_ResetBits(GPIOE,GPIO_Pin_10);
+			   	 	GPIO_ResetBits(GPIOE,GPIO_Pin_11);
+	    	   	 GPIO_SetBits(GPIOE,GPIO_Pin_12);
+	          	 GPIO_ResetBits(GPIOE,GPIO_Pin_13);
+	                  	Delay(10);
 
-
-
-	                   	GPIO_ResetBits(GPIOE,GPIO_Pin_10);
-	                   	GPIO_SetBits(GPIOE,GPIO_Pin_11);
-	                   	GPIO_ResetBits(GPIOE,GPIO_Pin_12);
-	                   	GPIO_ResetBits(GPIOE,GPIO_Pin_13);
-
-	                	Delay(43);
-
-	                	GPIO_ResetBits(GPIOE,GPIO_Pin_10);
-	                 	GPIO_ResetBits(GPIOE,GPIO_Pin_11);
-	                   	GPIO_SetBits(GPIOE,GPIO_Pin_12);
-	                    GPIO_ResetBits(GPIOE,GPIO_Pin_13);
-
-	                      	Delay(43);
-
-	                       GPIO_SetBits(GPIOE,GPIO_Pin_10);
-	                 	 	GPIO_ResetBits(GPIOE,GPIO_Pin_11);
-	                  	   	 GPIO_ResetBits(GPIOE,GPIO_Pin_12);
-	                      	 GPIO_ResetBits(GPIOE,GPIO_Pin_13);
-	                				    Delay(43);
-
-
-					//continue;
+			    	 					    		       			    		               	//continue;
 			     	}
 
 
@@ -439,4 +425,3 @@ char motor;
 
 	*/
 	}
-
