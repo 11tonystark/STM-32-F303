@@ -85,7 +85,7 @@ void UART_Init()
 	RCC_APB1PeriphClockCmd(RCC_APB1Periph_UART4, ENABLE);
 
 	/* UART configuration */
-	USART_InitStructure.USART_BaudRate = 19200;
+	USART_InitStructure.USART_BaudRate = 38400;
 	USART_InitStructure.USART_WordLength = USART_WordLength_8b;
 	USART_InitStructure.USART_StopBits = USART_StopBits_1;
 	USART_InitStructure.USART_Parity = USART_Parity_No;
@@ -298,12 +298,12 @@ char motor;
 			     	}
 
 			    	 	else if(motor=='C')
-			    	 			{//pitch f
+			    	 			{//gripper f
 			    	 				GPIO_SetBits(GPIOA,GPIO_Pin_2);//direc
 			    	 				GPIO_SetBits(GPIOA,GPIO_Pin_3);//gpio
 			    	 			}
 			    	 		else if(motor=='D')
-			    	 			{//pitch  b
+			    	 			{//gripper  b
 			    	 				GPIO_SetBits(GPIOA,GPIO_Pin_2);//dirc
 			    	 				GPIO_ResetBits(GPIOA,GPIO_Pin_3);//gpio
 			    	 			}
@@ -326,17 +326,27 @@ char motor;
 			    	 			Stopthearm();
 			    	 			}
 
-			    	 }
-				else
-					{
-					// Stopthearm();
-					 GPIO_ResetBits(GPIOE,GPIO_Pin_8);
-				//	 DCServostop();
-					// break;
-
-					}
-
 				}
+
+			 	else
+			 					{
+			 					// Stopthearm();
+			 					 GPIO_ResetBits(GPIOE,GPIO_Pin_8);
+			 				//	 DCServostop();
+			 					//continue;
+			 					}
+
+
+	}}
+			//	else
+				//	{
+					// Stopthearm();
+					// GPIO_ResetBits(GPIOE,GPIO_Pin_8);
+									// break;
+
+				//	}
+
+
 		/*
 		 d=USART_ReceiveData(UART4);
 		// dp=d;
@@ -378,5 +388,5 @@ char motor;
 
 
 	*/
-	}
+
 

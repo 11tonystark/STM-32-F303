@@ -340,25 +340,25 @@ char motor;
 			               	GPIO_SetBits(GPIOE,GPIO_Pin_11);
 			                 GPIO_ResetBits(GPIOE,GPIO_Pin_12);
 			                 	GPIO_ResetBits(GPIOE,GPIO_Pin_13);
-			    		            	Delay(0);
+			    		            //	Delay(0);
 
                                          	GPIO_ResetBits(GPIOE,GPIO_Pin_10);
  			    		                   	GPIO_ResetBits(GPIOE,GPIO_Pin_11);
   			    		                   	GPIO_ResetBits(GPIOE,GPIO_Pin_12);
 			    		                   	GPIO_SetBits(GPIOE,GPIO_Pin_13);
-	    		                	Delay(0);
+	    		                //	Delay(0);
    		                  	GPIO_SetBits(GPIOE,GPIO_Pin_10);
                   	GPIO_ResetBits(GPIOE,GPIO_Pin_11);
                  	GPIO_ResetBits(GPIOE,GPIO_Pin_12);
 			         GPIO_ResetBits(GPIOE,GPIO_Pin_13);
- 			    		               	Delay(0);
+ 			    		            //   	Delay(0);
 
 	       			    	    	 		 //linear act, f
    					GPIO_ResetBits(GPIOE,GPIO_Pin_10);
 			   	 	GPIO_ResetBits(GPIOE,GPIO_Pin_11);
 	    	   	 GPIO_SetBits(GPIOE,GPIO_Pin_12);
 	          	 GPIO_ResetBits(GPIOE,GPIO_Pin_13);
-	                  	Delay(1);
+	                  	Delay(10);
 
 			    	 					    		       			    		               	//continue;
 			     	}
