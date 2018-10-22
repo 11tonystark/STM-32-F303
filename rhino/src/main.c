@@ -52,7 +52,7 @@ void gpioinit()
 
 	//SET GPIO PIN 10, 12, 13 as output pins
 	GPIO_InitTypeDef GPIO_InitStruct;
-	GPIO_InitStruct.GPIO_Pin = GPIO_Pin_13| GPIO_Pin_12| GPIO_Pin_10 | GPIO_Pin_8;
+	GPIO_InitStruct.GPIO_Pin = GPIO_Pin_13| GPIO_Pin_12| GPIO_Pin_10 |GPIO_Pin_11 | GPIO_Pin_8;
 	GPIO_InitStruct.GPIO_Mode = GPIO_Mode_OUT;
 	GPIO_InitStruct.GPIO_Speed = GPIO_Speed_50MHz;
 	GPIO_InitStruct.GPIO_OType = GPIO_OType_PP;
@@ -60,7 +60,7 @@ void gpioinit()
 
 	// Initialization of GPIO PORT E Pin 10, 13 and Pin 12
 	GPIO_Init(GPIOE,&GPIO_InitStruct);
-	GPIO_ResetBits(GPIOE,GPIO_Pin_13 | GPIO_Pin_12 | GPIO_Pin_10 | GPIO_Pin_8);
+	GPIO_ResetBits(GPIOE,GPIO_Pin_13 | GPIO_Pin_12 | GPIO_Pin_10 |GPIO_Pin_11 | GPIO_Pin_8);
 
 
 }
@@ -188,12 +188,24 @@ void UART_Init()
 }
 void shut()
 {
-	GPIO_ResetBits(GPIOE,GPIO_Pin_13 | GPIO_Pin_12 | GPIO_Pin_10| GPIO_Pin_8);
+
+
+	GPIO_ResetBits(GPIOE,GPIO_Pin_13 | GPIO_Pin_12 | GPIO_Pin_10|GPIO_Pin_11 | GPIO_Pin_8);
 	GPIO_ResetBits(GPIOA,GPIO_Pin_11 | GPIO_Pin_10 | GPIO_Pin_9 | GPIO_Pin_8 | GPIO_Pin_7 | GPIO_Pin_6 | GPIO_Pin_5 | GPIO_Pin_4 | GPIO_Pin_3 | GPIO_Pin_2 | GPIO_Pin_1 | GPIO_Pin_0);
 	TIM_SetCompare1(TIM1, 0);
 	TIM_SetCompare2(TIM1, 0);
 
 }
+
+void Delay(int time)
+{
+	volatile int i,j;
+
+	time = time*10;
+	for (i=0;i<time;i++)
+		j++;
+}
+
 void motorcode(long double x, long double y,long double gear)
 {
 	//Converting to Normal Coordinates
@@ -262,8 +274,9 @@ void armcode(char link)
 {
 	if(link=='A')
 		{
-			GPIO_SetBits(GPIOA,GPIO_Pin_0); //roll f
-			GPIO_SetBits(GPIOA,GPIO_Pin_1);
+
+		GPIO_SetBits(GPIOA,GPIO_Pin_0); // roll b
+					GPIO_SetBits(GPIOA,GPIO_Pin_1);
 		}
 	else if(link=='B')
 		{
@@ -282,23 +295,44 @@ void armcode(char link)
 		}
 	else if(link=='E')
 		{
-			GPIO_SetBits(GPIOA,GPIO_Pin_4); //linear act. f
-			GPIO_SetBits(GPIOA,GPIO_Pin_5);
+		                         GPIO_SetBits(GPIOE,GPIO_Pin_11); //13-->11
+
+					     		GPIO_SetBits(GPIOE,GPIO_Pin_10);  //12-->10
+							    		 Delay(3);
+
+							    		     		// Delay(100);
+					    		 GPIO_ResetBits(GPIOE,GPIO_Pin_11);
+		    		          	GPIO_ResetBits(GPIOE,GPIO_Pin_10);
+
 		}
 	else if(link=='F')
 		{
-			GPIO_SetBits(GPIOA,GPIO_Pin_4); // linear act. b
-			GPIO_ResetBits(GPIOA,GPIO_Pin_5);
+		                  GPIO_ResetBits(GPIOE,GPIO_Pin_11);
+				           	GPIO_SetBits(GPIOE,GPIO_Pin_10);
+		                 	Delay(7);
+				                GPIO_SetBits(GPIOE,GPIO_Pin_11);
+				              	GPIO_ResetBits(GPIOE,GPIO_Pin_10);
+				                	Delay(7);
 		}
 	else if(link=='G')
 		{
-			GPIO_SetBits(GPIOA,GPIO_Pin_6);
-			GPIO_SetBits(GPIOA,GPIO_Pin_7);
+		 GPIO_SetBits(GPIOE,GPIO_Pin_13);
+					    		     		GPIO_SetBits(GPIOE,GPIO_Pin_12);
+					    		     		Delay(3);
+
+					    		     		// Delay(100);
+					    		     		 GPIO_ResetBits(GPIOE,GPIO_Pin_13);
+					    		          	GPIO_ResetBits(GPIOE,GPIO_Pin_12);
 		}
 	else if(link=='H')
 		{
-			GPIO_SetBits(GPIOA,GPIO_Pin_6);
-			GPIO_ResetBits(GPIOA,GPIO_Pin_7);
+
+		 GPIO_ResetBits(GPIOE,GPIO_Pin_13);
+		                  	GPIO_SetBits(GPIOE,GPIO_Pin_12);
+		                  	Delay(7);
+		               		 GPIO_SetBits(GPIOE,GPIO_Pin_13);
+		                    	GPIO_ResetBits(GPIOE,GPIO_Pin_12);
+		                    	Delay(7);
 		}
 	else if(link=='I')
 		{
