@@ -310,8 +310,8 @@ void armcode(char link)
 
 	else if(link=='G')
 		{ //link 2 clockwise
-		 GPIO_SetBits(GPIOA,GPIO_Pin_5);//pin pe13 is pulse +ve
-		GPIO_SetBits(GPIOA,GPIO_Pin_4);//pin pe12 is direction +ve
+		 GPIO_SetBits(GPIOA,GPIO_Pin_5);//pin pa5 is pulse +ve
+		GPIO_SetBits(GPIOA,GPIO_Pin_4);//pin pa4 is direction +ve
 	    Delay(3);
 // pin4--12 , pin5--13
 					    		     		// Delay(100);
@@ -321,12 +321,12 @@ void armcode(char link)
 	else if(link=='H')
 		{
    // anti clockwise
-		 GPIO_ResetBits(GPIOA,GPIO_Pin_5);
+		                GPIO_ResetBits(GPIOA,GPIO_Pin_5);
 		                  	GPIO_SetBits(GPIOA,GPIO_Pin_4);
-		                  	Delay(7);
+		                  	Delay(3);
 		               		 GPIO_SetBits(GPIOA,GPIO_Pin_5);
 		                    	GPIO_ResetBits(GPIOA,GPIO_Pin_4);
-		                    	Delay(7);
+		                    	//Delay(7);
 		}
 	else if(link=='I')
 		{
@@ -335,6 +335,7 @@ void armcode(char link)
 						 Delay(3);
              GPIO_ResetBits(GPIOA,GPIO_Pin_9);
 				GPIO_ResetBits(GPIOA,GPIO_Pin_8);
+			//	Delay(7);
 		}
 	else if(link=='J')
 		{
@@ -342,10 +343,10 @@ void armcode(char link)
 		//pitch anticlock
 		                  GPIO_ResetBits(GPIOA,GPIO_Pin_9);
 				           	GPIO_SetBits(GPIOA,GPIO_Pin_8);
-		                 	Delay(7);
+		                 	Delay(3);
 				                GPIO_SetBits(GPIOA,GPIO_Pin_9);
 				              	GPIO_ResetBits(GPIOA,GPIO_Pin_8);
-				                	Delay(7);
+				                //	Delay(7);
 		}
 
 
