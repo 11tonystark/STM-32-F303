@@ -49,9 +49,10 @@ void gpioinit()
 	//Enable clock for GPIOE
 	RCC_AHBPeriphClockCmd(RCC_AHBPeriph_GPIOE,ENABLE);
 	RCC_AHBPeriphClockCmd(RCC_AHBPeriph_GPIOB, ENABLE);
+	RCC_AHBPeriphClockCmd(RCC_AHBPeriph_GPIOD, ENABLE);
 	//SET GPIO PIN 10, 12, 13 as output pins
 	GPIO_InitTypeDef GPIO_InitStruct;
-	GPIO_InitStruct.GPIO_Pin = GPIO_Pin_15|GPIO_Pin_14|GPIO_Pin_13| GPIO_Pin_12| GPIO_Pin_10 |GPIO_Pin_11 | GPIO_Pin_8;
+	GPIO_InitStruct.GPIO_Pin = GPIO_Pin_7 | GPIO_Pin_15|GPIO_Pin_14|GPIO_Pin_13| GPIO_Pin_12| GPIO_Pin_10 |GPIO_Pin_11 | GPIO_Pin_8;
 	GPIO_InitStruct.GPIO_Mode = GPIO_Mode_OUT;
 	GPIO_InitStruct.GPIO_Speed = GPIO_Speed_50MHz;
 	GPIO_InitStruct.GPIO_OType = GPIO_OType_PP;
@@ -249,7 +250,7 @@ void Delay(int time)
 		j++;
 }
 
-void motorcode(long double x, long double y,long double gear)
+void motorcode(long double x, long double y,long double gear,char n)
 {
 	//Converting to Normal Coordinates
 	x = x - 4999.5;
@@ -315,6 +316,34 @@ void motorcode(long double x, long double y,long double gear)
 		TIM_SetCompare2(TIM1, -y);
 		TIM_SetCompare2(TIM3, -y);
 	}
+	if(n=='a')
+		{
+			GPIO_SetBits(GPIOB,GPIO_Pin_1);
+			GPIO_SetBits(GPIOB,GPIO_Pin_3);
+		}
+		else if(n=='b')
+		{
+			GPIO_SetBits(GPIOB,GPIO_Pin_1);
+			GPIO_ResetBits(GPIOB,GPIO_Pin_3);
+		}
+		else if(n=='c')
+		{
+			GPIO_SetBits(GPIOB,GPIO_Pin_5);
+			GPIO_SetBits(GPIOB,GPIO_Pin_8);
+		}
+		else if(n=='d')
+		{
+			GPIO_SetBits(GPIOB,GPIO_Pin_5);
+			GPIO_ResetBits(GPIOB,GPIO_Pin_8);
+		}
+
+		else if(n=='z')
+		{
+			GPIO_ResetBits(GPIOB,GPIO_Pin_5);
+			GPIO_ResetBits(GPIOB,GPIO_Pin_1);
+			GPIO_ResetBits(GPIOB,GPIO_Pin_3);
+			GPIO_ResetBits(GPIOB,GPIO_Pin_8);
+		}
 
 }
 void armcode(char link)
@@ -419,38 +448,11 @@ void armcode(char link)
 			shut();
 
 }
-void camera(char n)
-{
-	if(n=='a')
-	{
-		GPIO_SetBits(GPIOB,GPIO_Pin_1);
-		GPIO_SetBits(GPIOB,GPIO_Pin_3);
-	}
-	else if(n=='b')
-	{
-		GPIO_SetBits(GPIOB,GPIO_Pin_1);
-		GPIO_ResetBits(GPIOB,GPIO_Pin_3);
-	}
-	else if(n=='c')
-	{
-		GPIO_SetBits(GPIOB,GPIO_Pin_5);
-		GPIO_SetBits(GPIOB,GPIO_Pin_8);
-	}
-	else if(n=='d')
-	{
-		GPIO_SetBits(GPIOB,GPIO_Pin_5);
-		GPIO_ResetBits(GPIOB,GPIO_Pin_8);
-	}
-	else if(n=='z')
-	{
-		shut();
-	}
 
-}
 int main(void)
 {
 	uint32_t x = 0, y = 0, gear = 0;
-	char c = ' ';
+	char c = 'k';
 	long cnt=0;
 
 	gpioinit();
@@ -468,7 +470,7 @@ int main(void)
 		{
 			cnt=0;
 			GPIO_SetBits(GPIOE, GPIO_Pin_10);
-			motorcode(x,y,gear);
+			motorcode(x,y,gear,c);
 
 			gear=uartreceive()-'0';
 			if(uartreceive()=='x')
@@ -479,22 +481,22 @@ int main(void)
 
 					{
 						//shut();
-						continue;
+						continue;if(uartreceive()=='c')
+						{
+							c=(uartreceive());
+						}
 					}
 			if(uartreceive()=='y')
 					{
 						y=(uartreceive()-'0')*1000+(uartreceive()-'0')*100+(uartreceive()-'0')*10+(uartreceive()-'0');
+						c=uartreceive();
 					}
 					{
 						//shut();
 						continue;
 					}
-			if(uartreceive()=='c')
-			{
-				c=(uartreceive());
-			}
-			camera(c);
-			motorcode(x,y,gear);
+			//camera(c);
+			//motorcode(x,y,gear,c);
 		//	camera(c);
 
 			}
@@ -515,4 +517,4 @@ int main(void)
 
 
 	}
-	}
+}
