@@ -27,11 +27,7 @@ src/main.o: ../src/main.c \
  /home/tony/workspace/bms/StdPeriph_Driver/inc/stm32f30x_tim.h \
  /home/tony/workspace/bms/StdPeriph_Driver/inc/stm32f30x_usart.h \
  /home/tony/workspace/bms/StdPeriph_Driver/inc/stm32f30x_wwdg.h \
- /home/tony/workspace/bms/StdPeriph_Driver/inc/stm32f30x_misc.h \
- /home/tony/workspace/bms/Utilities/stm32f3_discovery.h \
- /home/tony/workspace/bms/StdPeriph_Driver/inc/stm32f30x_rcc.h \
- /home/tony/workspace/bms/StdPeriph_Driver/inc/stm32f30x_adc.h \
- /home/tony/workspace/bms/StdPeriph_Driver/inc/stm32f30x_gpio.h
+ /home/tony/workspace/bms/StdPeriph_Driver/inc/stm32f30x_misc.h
 
 /home/tony/workspace/bms/CMSIS/device/stm32f30x.h:
 
@@ -90,11 +86,3 @@ src/main.o: ../src/main.c \
 /home/tony/workspace/bms/StdPeriph_Driver/inc/stm32f30x_wwdg.h:
 
 /home/tony/workspace/bms/StdPeriph_Driver/inc/stm32f30x_misc.h:
-
-/home/tony/workspace/bms/Utilities/stm32f3_discovery.h:
-
-/home/tony/workspace/bms/StdPeriph_Driver/inc/stm32f30x_rcc.h:
-
-/home/tony/workspace/bms/StdPeriph_Driver/inc/stm32f30x_adc.h:
-
-/home/tony/workspace/bms/StdPeriph_Driver/inc/stm32f30x_gpio.h:
