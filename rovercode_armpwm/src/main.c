@@ -52,7 +52,7 @@ void gpioinit()
 	RCC_AHBPeriphClockCmd(RCC_AHBPeriph_GPIOD, ENABLE);
 	//SET GPIO PIN 10, 12, 13 as output pins
 	GPIO_InitTypeDef GPIO_InitStruct;
-	GPIO_InitStruct.GPIO_Pin = GPIO_Pin_7 | GPIO_Pin_15|GPIO_Pin_14|GPIO_Pin_13| GPIO_Pin_12| GPIO_Pin_10 |GPIO_Pin_11 | GPIO_Pin_8;
+	GPIO_InitStruct.GPIO_Pin = GPIO_Pin_7 | GPIO_Pin_15|GPIO_Pin_13| GPIO_Pin_12| GPIO_Pin_10 |GPIO_Pin_11 | GPIO_Pin_8;
 	GPIO_InitStruct.GPIO_Mode = GPIO_Mode_OUT;
 	GPIO_InitStruct.GPIO_Speed = GPIO_Speed_50MHz;
 	GPIO_InitStruct.GPIO_OType = GPIO_OType_PP;
@@ -72,7 +72,7 @@ void gpioinit()
 
 	GPIO_Init(GPIOB, &GPIO_InitStruct);//Camera Pins
 
-	GPIO_ResetBits(GPIOE,GPIO_Pin_15|GPIO_Pin_14|GPIO_Pin_13 | GPIO_Pin_12 | GPIO_Pin_10 |GPIO_Pin_11 | GPIO_Pin_8);
+	GPIO_ResetBits(GPIOE,GPIO_Pin_15|GPIO_Pin_13 | GPIO_Pin_12 | GPIO_Pin_10 |GPIO_Pin_11 | GPIO_Pin_8);
 	GPIO_ResetBits(GPIOB,GPIO_Pin_1 | GPIO_Pin_3 |GPIO_Pin_5 | GPIO_Pin_8);
 
 	GPIO_InitStruct.GPIO_Pin = GPIO_Pin_5|GPIO_Pin_2;
@@ -94,7 +94,7 @@ void gpioinit1()
 //pa1 ko remove kiya as it is pwm
 	//SET GPIO PIN 0-11 as output pins
 	GPIO_InitTypeDef GPIO_InitStruct;
-	GPIO_InitStruct.GPIO_Pin = GPIO_Pin_11 | GPIO_Pin_10 | GPIO_Pin_9 | GPIO_Pin_8 | GPIO_Pin_7 | GPIO_Pin_6 | GPIO_Pin_5 | GPIO_Pin_4 | GPIO_Pin_3 | GPIO_Pin_2 | GPIO_Pin_0;
+	GPIO_InitStruct.GPIO_Pin = GPIO_Pin_11 | GPIO_Pin_10 | GPIO_Pin_8 | GPIO_Pin_7 | GPIO_Pin_6 | GPIO_Pin_5 | GPIO_Pin_4 | GPIO_Pin_3 | GPIO_Pin_2 | GPIO_Pin_0;
 	GPIO_InitStruct.GPIO_Mode = GPIO_Mode_OUT;
 	GPIO_InitStruct.GPIO_Speed = GPIO_Speed_50MHz;
 	GPIO_InitStruct.GPIO_OType = GPIO_OType_PP;
@@ -176,18 +176,16 @@ void pwminit()
 
 	//init for arm
 
-
-	//enable the AHB Peripheral Clock to use GPIOE
 	RCC_AHBPeriphClockCmd(RCC_AHBPeriph_GPIOA, ENABLE);
-//	RCC_AHBPeriphClockCmd(RCC_AHBPeriph_GPIOE, ENABLE);
+	RCC_AHBPeriphClockCmd(RCC_AHBPeriph_GPIOE, ENABLE);
 
 
 	RCC_APB1PeriphClockCmd(RCC_APB1Periph_TIM2, ENABLE);
-	///RCC_APB2PeriphClockCmd(RCC_APB2Periph_TIM1, ENABLE);
+	RCC_APB2PeriphClockCmd(RCC_APB2Periph_TIM1, ENABLE);
 
 
 	// Pin configuration of PWM
-	GPIO_InitStructure.GPIO_Pin =   GPIO_Pin_1;
+	GPIO_InitStructure.GPIO_Pin =   GPIO_Pin_1|GPIO_Pin_9;
 	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AF;
 	GPIO_InitStructure.GPIO_OType = GPIO_OType_PP;
 	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
@@ -196,19 +194,19 @@ void pwminit()
 	GPIO_Init(GPIOA, &GPIO_InitStructure);
 
 	// Pin configuration of PWM
-	//	GPIO_InitStructure.GPIO_Pin =  GPIO_Pin_14;
-//		GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AF;
-	//	GPIO_InitStructure.GPIO_OType = GPIO_OType_PP;
-//		GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
-	//	GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_UP;
+		GPIO_InitStructure.GPIO_Pin =  GPIO_Pin_14;
+		GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AF;
+		GPIO_InitStructure.GPIO_OType = GPIO_OType_PP;
+		GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
+		GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_UP;
 
-		//GPIO_Init(GPIOE, &GPIO_InitStructure);
+		GPIO_Init(GPIOE, &GPIO_InitStructure);
 
 
 
-//	GPIO_PinAFConfig(GPIOA, GPIO_PinSource9, GPIO_AF_10);//Right front
+	GPIO_PinAFConfig(GPIOA, GPIO_PinSource9, GPIO_AF_10);//Right front
 	GPIO_PinAFConfig(GPIOA, GPIO_PinSource1, GPIO_AF_1);
-	//GPIO_PinAFConfig(GPIOE, GPIO_PinSource14, GPIO_AF_2);
+	GPIO_PinAFConfig(GPIOE, GPIO_PinSource14, GPIO_AF_2);
 
 
 
@@ -219,16 +217,16 @@ void pwminit()
 	TIM_TimeBaseStructure.TIM_RepetitionCounter = 0;
 
 	TIM_TimeBaseInit(TIM2, &TIM_TimeBaseStructure);
-	//TIM_TimeBaseInit(TIM1, &TIM_TimeBaseStructure);
+	TIM_TimeBaseInit(TIM1, &TIM_TimeBaseStructure);
 
 	TIM_OCInitStructure.TIM_OCMode = TIM_OCMode_PWM1;
 	TIM_OCInitStructure.TIM_OutputState = TIM_OutputState_Enable;
 	TIM_OCInitStructure.TIM_Pulse = 4799;
 	TIM_OCInitStructure.TIM_OCPolarity = TIM_OCPolarity_High;
 
-//	TIM_OC3Init(TIM2, &TIM_OCInitStructure);
+	TIM_OC3Init(TIM2, &TIM_OCInitStructure);
 	TIM_OC2Init(TIM2, &TIM_OCInitStructure);
-//	TIM_OC4Init(TIM1, &TIM_OCInitStructure);
+	TIM_OC4Init(TIM1, &TIM_OCInitStructure);
 
 	//enable the PWM output
 	TIM_CtrlPWMOutputs(TIM2, ENABLE);
@@ -238,10 +236,10 @@ void pwminit()
 	TIM_SetCompare3(TIM2, 0);
 	TIM_SetCompare2(TIM2, 0);
 
-//	TIM_CtrlPWMOutputs(TIM1, ENABLE);
-	//TIM_Cmd(TIM1, ENABLE);
+	TIM_CtrlPWMOutputs(TIM1, ENABLE);
+	TIM_Cmd(TIM1, ENABLE);
 
-	//TIM_SetCompare4(TIM1, 0);
+	TIM_SetCompare4(TIM1, 0);
 
 
 
@@ -302,8 +300,8 @@ void shut()
 {
 //pa1 removed from reset as it pwm
 
-	GPIO_ResetBits(GPIOE,GPIO_Pin_15|GPIO_Pin_14|GPIO_Pin_13 | GPIO_Pin_12 | GPIO_Pin_10|GPIO_Pin_11 | GPIO_Pin_8);
-	GPIO_ResetBits(GPIOA,GPIO_Pin_11 | GPIO_Pin_10 | GPIO_Pin_9 | GPIO_Pin_8 | GPIO_Pin_7 | GPIO_Pin_6 | GPIO_Pin_5 | GPIO_Pin_4 | GPIO_Pin_3 | GPIO_Pin_2 | GPIO_Pin_0);
+	GPIO_ResetBits(GPIOE,GPIO_Pin_15|GPIO_Pin_13 | GPIO_Pin_12 | GPIO_Pin_10|GPIO_Pin_11 | GPIO_Pin_8);
+	GPIO_ResetBits(GPIOA,GPIO_Pin_11 | GPIO_Pin_10 | GPIO_Pin_8 | GPIO_Pin_7 | GPIO_Pin_6 | GPIO_Pin_5 | GPIO_Pin_4 | GPIO_Pin_3 | GPIO_Pin_2 | GPIO_Pin_0);
 	GPIO_ResetBits(GPIOB,GPIO_Pin_1 | GPIO_Pin_3 | GPIO_Pin_5 | GPIO_Pin_8);
 	GPIO_ResetBits(GPIOD,GPIO_Pin_5|GPIO_Pin_2);
 	TIM_SetCompare1(TIM1, 0);
@@ -424,7 +422,9 @@ void motorcode(long double x, long double y,long double gear,char n)
 
 }
 void armcode(char link)
-{//linear act 2==>swivel base
+{//linear act 2<==>swivel base
+	///linear act 1<==> 1st motor of roll$pitch(pa4,5 to pa8,9)
+	///
 	if(link=='A')
 				{
 
@@ -437,30 +437,34 @@ void armcode(char link)
 					GPIO_ResetBits(GPIOD,GPIO_Pin_5);
 				}
 			else if(link=='C')
-				{
-					GPIO_SetBits(GPIOA,GPIO_Pin_8); //linear act. f
-					GPIO_SetBits(GPIOA,GPIO_Pin_9);
+				{ GPIO_SetBits(GPIOA,GPIO_Pin_4);
+				 GPIO_SetBits(GPIOA,GPIO_Pin_5);
 				}
 			else if(link=='D')
 				{
-					GPIO_SetBits(GPIOA,GPIO_Pin_8); /// linear act. b
-					GPIO_ResetBits(GPIOA,GPIO_Pin_9);
+				 GPIO_SetBits(GPIOA,GPIO_Pin_4);
+				 GPIO_ResetBits(GPIOA,GPIO_Pin_5);
 				}
 			else if(link=='E')
 				{
-				GPIO_SetBits(GPIOE,GPIO_Pin_15); //roll b
-									GPIO_SetBits(GPIOE,GPIO_Pin_14);
+				GPIO_ResetBits(GPIOE,GPIO_Pin_15); //Roll
+				TIM_SetCompare4(TIM1,3000);
+				                           //	GPIO_SetBits(GPIOE,GPIO_Pin_14); //pe14 =pwm
+				GPIO_SetBits(GPIOA,GPIO_Pin_8);
+				TIM_SetCompare3(TIM2,3000);
+								//pa9 pwm
 
-							         GPIO_SetBits(GPIOA,GPIO_Pin_4);
-									 GPIO_ResetBits(GPIOA,GPIO_Pin_5);
 				}
 			else if(link=='F')
 				{
-				GPIO_SetBits(GPIOE,GPIO_Pin_15); //roll f
-										GPIO_ResetBits(GPIOE,GPIO_Pin_14);
 
-								         GPIO_SetBits(GPIOA,GPIO_Pin_4);
-										 GPIO_SetBits(GPIOA,GPIO_Pin_5);
+				GPIO_SetBits(GPIOE,GPIO_Pin_15); //Roll
+				TIM_SetCompare4(TIM1,3000);
+											//	GPIO_SetBits(GPIOE,GPIO_Pin_14); //pe14 =pwm
+				GPIO_ResetBits(GPIOA,GPIO_Pin_8);
+				TIM_SetCompare3(TIM2,3000);
+				//pa9 pwm
+
 				}
 
 
@@ -478,21 +482,22 @@ void armcode(char link)
 				}
 			else if(link=='I')
 				{
-				GPIO_SetBits(GPIOE,GPIO_Pin_15); //PITCH b
-									GPIO_SetBits(GPIOE,GPIO_Pin_14);
+				GPIO_SetBits(GPIOE,GPIO_Pin_15); //pitch
+				TIM_SetCompare4(TIM1,2650);
+							//	GPIO_SetBits(GPIOE,GPIO_Pin_14); //pe14 =pwm
+				GPIO_SetBits(GPIOA,GPIO_Pin_8);
+				TIM_SetCompare3(TIM2,2560);
+							//	GPIO_SetBits(GPIOA,GPIO_Pin_9);   //pa9 = pwm
 
-							         GPIO_SetBits(GPIOA,GPIO_Pin_4);
-									 GPIO_SetBits(GPIOA,GPIO_Pin_5);
 
 				}
 			else if(link=='J')
 				{
-
-				GPIO_SetBits(GPIOE,GPIO_Pin_15); //PITCH b
-									GPIO_ResetBits(GPIOE,GPIO_Pin_14);
-
-							         GPIO_SetBits(GPIOA,GPIO_Pin_4);
-									 GPIO_ResetBits(GPIOA,GPIO_Pin_5);
+				GPIO_ResetBits(GPIOE,GPIO_Pin_15); //pitch
+				TIM_SetCompare4(TIM1,2650);
+										//	GPIO_SetBits(GPIOE,GPIO_Pin_14); //pe14 =pwm
+				GPIO_ResetBits(GPIOA,GPIO_Pin_8);
+				TIM_SetCompare3(TIM2,2650);
 
 				}
 
