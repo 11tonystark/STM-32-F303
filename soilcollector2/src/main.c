@@ -52,7 +52,7 @@ void gpioinit()
 	RCC_AHBPeriphClockCmd(RCC_AHBPeriph_GPIOD, ENABLE);
 	//SET GPIO PIN 10, 12, 13 as output pins
 	GPIO_InitTypeDef GPIO_InitStruct;
-	GPIO_InitStruct.GPIO_Pin = GPIO_Pin_7 | GPIO_Pin_15|GPIO_Pin_14|GPIO_Pin_13| GPIO_Pin_12| GPIO_Pin_10 |GPIO_Pin_11 | GPIO_Pin_8;
+	GPIO_InitStruct.GPIO_Pin = GPIO_Pin_7 | GPIO_Pin_15|GPIO_Pin_13| GPIO_Pin_12| GPIO_Pin_10 |GPIO_Pin_11 | GPIO_Pin_8;
 	GPIO_InitStruct.GPIO_Mode = GPIO_Mode_OUT;
 	GPIO_InitStruct.GPIO_Speed = GPIO_Speed_50MHz;
 	GPIO_InitStruct.GPIO_OType = GPIO_OType_PP;
@@ -72,7 +72,7 @@ void gpioinit()
 
 	GPIO_Init(GPIOB, &GPIO_InitStruct);//Camera Pins
 
-	GPIO_ResetBits(GPIOE,GPIO_Pin_15|GPIO_Pin_14|GPIO_Pin_13 | GPIO_Pin_12 | GPIO_Pin_10 |GPIO_Pin_11 | GPIO_Pin_8);
+	GPIO_ResetBits(GPIOE,GPIO_Pin_15|GPIO_Pin_13 | GPIO_Pin_12 | GPIO_Pin_10 |GPIO_Pin_11 | GPIO_Pin_8);
 	GPIO_ResetBits(GPIOB,GPIO_Pin_1 | GPIO_Pin_3 |GPIO_Pin_5 | GPIO_Pin_8);
 
 	GPIO_InitStruct.GPIO_Pin = GPIO_Pin_5|GPIO_Pin_2;
@@ -94,7 +94,7 @@ void gpioinit1()
 
 	//SET GPIO PIN 0-11 as output pins
 	GPIO_InitTypeDef GPIO_InitStruct;
-	GPIO_InitStruct.GPIO_Pin = GPIO_Pin_11 | GPIO_Pin_10 | GPIO_Pin_9 | GPIO_Pin_8 | GPIO_Pin_7 | GPIO_Pin_6 | GPIO_Pin_5 | GPIO_Pin_4 | GPIO_Pin_3 | GPIO_Pin_2 | GPIO_Pin_1 | GPIO_Pin_0;
+	GPIO_InitStruct.GPIO_Pin = GPIO_Pin_11 | GPIO_Pin_10 | GPIO_Pin_9 | GPIO_Pin_8 | GPIO_Pin_7 | GPIO_Pin_6 | GPIO_Pin_5 | GPIO_Pin_4 | GPIO_Pin_3 | GPIO_Pin_2 | GPIO_Pin_0;
 	GPIO_InitStruct.GPIO_Mode = GPIO_Mode_OUT;
 	GPIO_InitStruct.GPIO_Speed = GPIO_Speed_50MHz;
 	GPIO_InitStruct.GPIO_OType = GPIO_OType_PP;
@@ -173,6 +173,78 @@ void pwminit()
 	TIM_SetCompare1(TIM3, 0);
 	TIM_SetCompare2(TIM3, 0);
 
+	////
+
+
+	//init for arm
+
+	RCC_AHBPeriphClockCmd(RCC_AHBPeriph_GPIOA, ENABLE);
+	RCC_AHBPeriphClockCmd(RCC_AHBPeriph_GPIOE, ENABLE);
+
+
+	RCC_APB1PeriphClockCmd(RCC_APB1Periph_TIM2, ENABLE);
+	RCC_APB2PeriphClockCmd(RCC_APB2Periph_TIM1, ENABLE);
+
+
+	// Pin configuration of PWM
+	GPIO_InitStructure.GPIO_Pin =   GPIO_Pin_1;
+	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AF;
+	GPIO_InitStructure.GPIO_OType = GPIO_OType_PP;
+	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
+	GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_UP;
+
+	GPIO_Init(GPIOA, &GPIO_InitStructure);
+
+	// Pin configuration of PWM
+		GPIO_InitStructure.GPIO_Pin =  GPIO_Pin_14;
+		GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AF;
+		GPIO_InitStructure.GPIO_OType = GPIO_OType_PP;
+		GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
+		GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_UP;
+
+		GPIO_Init(GPIOE, &GPIO_InitStructure);
+
+
+
+//	GPIO_PinAFConfig(GPIOA, GPIO_PinSource9, GPIO_AF_10);//Right front
+	GPIO_PinAFConfig(GPIOA, GPIO_PinSource1, GPIO_AF_1);
+	GPIO_PinAFConfig(GPIOE, GPIO_PinSource14, GPIO_AF_2);
+
+
+
+	TIM_TimeBaseStructure.TIM_Period = 4800-1;
+	TIM_TimeBaseStructure.TIM_Prescaler = 0;
+	TIM_TimeBaseStructure.TIM_ClockDivision = 0;
+	TIM_TimeBaseStructure.TIM_CounterMode = TIM_CounterMode_Up;
+	TIM_TimeBaseStructure.TIM_RepetitionCounter = 0;
+
+	TIM_TimeBaseInit(TIM2, &TIM_TimeBaseStructure);
+	TIM_TimeBaseInit(TIM1, &TIM_TimeBaseStructure);
+
+	TIM_OCInitStructure.TIM_OCMode = TIM_OCMode_PWM1;
+	TIM_OCInitStructure.TIM_OutputState = TIM_OutputState_Enable;
+	TIM_OCInitStructure.TIM_Pulse = 4799;
+	TIM_OCInitStructure.TIM_OCPolarity = TIM_OCPolarity_High;
+
+//	TIM_OC3Init(TIM2, &TIM_OCInitStructure);
+	TIM_OC2Init(TIM2, &TIM_OCInitStructure);
+	TIM_OC4Init(TIM1, &TIM_OCInitStructure);
+
+	//enable the PWM output
+	TIM_CtrlPWMOutputs(TIM2, ENABLE);
+	TIM_Cmd(TIM2, ENABLE);
+
+
+	TIM_SetCompare3(TIM2, 0);
+	TIM_SetCompare2(TIM2, 0);
+
+	TIM_CtrlPWMOutputs(TIM1, ENABLE);
+	TIM_Cmd(TIM1, ENABLE);
+
+	TIM_SetCompare4(TIM1, 0);
+
+
+
 }
 
 void UART_Init()
@@ -230,14 +302,18 @@ void shut()
 {
 
 
-	GPIO_ResetBits(GPIOE,GPIO_Pin_15|GPIO_Pin_14|GPIO_Pin_13 | GPIO_Pin_12 | GPIO_Pin_10|GPIO_Pin_11 | GPIO_Pin_8);
-	GPIO_ResetBits(GPIOA,GPIO_Pin_11 | GPIO_Pin_10 | GPIO_Pin_9 | GPIO_Pin_8 | GPIO_Pin_7 | GPIO_Pin_6 | GPIO_Pin_4| GPIO_Pin_5| GPIO_Pin_3 | GPIO_Pin_2 | GPIO_Pin_1 | GPIO_Pin_0);
+	GPIO_ResetBits(GPIOE,GPIO_Pin_15|GPIO_Pin_13 | GPIO_Pin_12 | GPIO_Pin_10|GPIO_Pin_11 | GPIO_Pin_8);
+	GPIO_ResetBits(GPIOA,GPIO_Pin_11 | GPIO_Pin_10 | GPIO_Pin_9 | GPIO_Pin_8 | GPIO_Pin_7 | GPIO_Pin_6 | GPIO_Pin_4| GPIO_Pin_5| GPIO_Pin_3 | GPIO_Pin_2 | GPIO_Pin_0);
 	GPIO_ResetBits(GPIOB,GPIO_Pin_1 | GPIO_Pin_3 | GPIO_Pin_5 | GPIO_Pin_8);
 	GPIO_ResetBits(GPIOD,GPIO_Pin_5|GPIO_Pin_2);
 	TIM_SetCompare1(TIM1, 0);
 	TIM_SetCompare2(TIM1, 0);
 	TIM_SetCompare1(TIM3, 0);
 	TIM_SetCompare2(TIM3, 0);
+	//
+	TIM_SetCompare4(TIM1, 0);
+		TIM_SetCompare3(TIM2, 0);
+		TIM_SetCompare2(TIM2, 0);
 
 }
 
@@ -351,7 +427,8 @@ void armcode(char link)
 	if(link=='A')
 				{
 		GPIO_SetBits(GPIOA,GPIO_Pin_0);
-		GPIO_SetBits(GPIOA,GPIO_Pin_1); //auger  //pa1 pwm
+		TIM_SetCompare2(TIM2,2750);                               //vinegar
+		//GPIO_SetBits(GPIOA,GPIO_Pin_1);   //pa1 pwm
 
 				//GPIO_SetBits(GPIOD,GPIO_Pin_2); //
 				//GPIO_SetBits(GPIOD,GPIO_Pin_5);
@@ -360,16 +437,16 @@ void armcode(char link)
 				{
 
 				GPIO_ResetBits(GPIOA,GPIO_Pin_0);
-				GPIO_SetBits(GPIOA,GPIO_Pin_1);
+				TIM_SetCompare2(TIM2,1400);
+				//GPIO_SetBits(GPIOA,GPIO_Pin_1);
 					//GPIO_SetBits(GPIOD,GPIO_Pin_2); //
 					//GPIO_ResetBits(GPIOD,GPIO_Pin_5);
 				}
-			else if(link=='C')
+			else if(link=='C') //lead screw
 				{
-					GPIO_SetBits(GPIOA,GPIO_Pin_8); // water tube //pa9 pwm
+					GPIO_SetBits(GPIOA,GPIO_Pin_8);  //pa9 pwm
 					GPIO_SetBits(GPIOA,GPIO_Pin_9);
-					GPIO_SetBits(GPIOA,GPIO_Pin_6); // collector plate.
-								 GPIO_SetBits(GPIOA,GPIO_Pin_7);5
+
 				}
 			else if(link=='D')
 				{
@@ -377,22 +454,24 @@ void armcode(char link)
 					GPIO_SetBits(GPIOA,GPIO_Pin_9);
 				}
 			else if(link=='E')
-				{
+				{  //collector
 
-				GPIO_SetBits(GPIOE,GPIO_Pin_15); //vinegar tube //pe14 pwm
-					GPIO_SetBits(GPIOE,GPIO_Pin_14);
+				GPIO_SetBits(GPIOE,GPIO_Pin_15);  //pe14 pwm
+				//	GPIO_SetBits(GPIOE,GPIO_Pin_14);
+				TIM_SetCompare4(TIM1,2400);
 
 				}
 			else if(link=='F')
 				{
 					GPIO_ResetBits(GPIOE,GPIO_Pin_15);
-						GPIO_SetBits(GPIOE,GPIO_Pin_14);
+					//	GPIO_SetBits(GPIOE,GPIO_Pin_14);
+					TIM_SetCompare4(TIM1,2400);
 				}
 
 
 			else if(link=='G')
 				{
-				GPIO_SetBits(GPIOA,GPIO_Pin_6); // collector plate.
+				GPIO_SetBits(GPIOA,GPIO_Pin_6);  //auger
 			 GPIO_SetBits(GPIOA,GPIO_Pin_7);
 
 				}
@@ -403,7 +482,7 @@ void armcode(char link)
 				}
 			else if(link=='I')
 				{
-			         GPIO_SetBits(GPIOA,GPIO_Pin_4); // leads screw
+			         GPIO_SetBits(GPIOA,GPIO_Pin_4); //water
 					 GPIO_SetBits(GPIOA,GPIO_Pin_5);
 				}
 			else if(link=='J')
@@ -412,15 +491,17 @@ void armcode(char link)
 					 GPIO_ResetBits(GPIOA,GPIO_Pin_5);
 
 				}
-/*
+
 			else if(link=='K')
 				{
+				GPIO_ResetBits(GPIOA,GPIO_Pin_8);  //pa9 pwm
+				GPIO_SetBits(GPIOA,GPIO_Pin_9);
 
-			//	GPIO_ResetBits(GPIOE,GPIO_Pin_15|GPIO_Pin_14|GPIO_Pin_13 | GPIO_Pin_12 | GPIO_Pin_10|GPIO_Pin_11 | GPIO_Pin_8);
-			//	GPIO_ResetBits(GPIOA,GPIO_Pin_11 | GPIO_Pin_10 | GPIO_Pin_9 | GPIO_Pin_8 | GPIO_Pin_7 | GPIO_Pin_6 | GPIO_Pin_5 | GPIO_Pin_4 | GPIO_Pin_3 | GPIO_Pin_2 | GPIO_Pin_1 | GPIO_Pin_0);
-			//	GPIO_ResetBits(GPIOD,GPIO_Pin_5|GPIO_Pin_2);
+				GPIO_SetBits(GPIOA,GPIO_Pin_0);
+				TIM_SetCompare2(TIM2,5400);
+
 				}
-			else if(link=='L')
+	/*		else if(link=='L')
 				{
 
 			//	GPIO_ResetBits(GPIOE,GPIO_Pin_15|GPIO_Pin_14|GPIO_Pin_13 | GPIO_Pin_12 | GPIO_Pin_10|GPIO_Pin_11 | GPIO_Pin_8);

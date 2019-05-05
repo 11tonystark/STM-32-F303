@@ -76,7 +76,7 @@ void gpioinit()
 	GPIO_ResetBits(GPIOE,GPIO_Pin_15|GPIO_Pin_13 | GPIO_Pin_12 | GPIO_Pin_10 |GPIO_Pin_11 | GPIO_Pin_8);
 	GPIO_ResetBits(GPIOB,GPIO_Pin_1 | GPIO_Pin_3 |GPIO_Pin_5 | GPIO_Pin_8);
 
-	GPIO_InitStruct.GPIO_Pin = GPIO_Pin_5|GPIO_Pin_2;
+	GPIO_InitStruct.GPIO_Pin = GPIO_Pin_5|GPIO_Pin_8;
 		GPIO_InitStruct.GPIO_Mode = GPIO_Mode_OUT;
 		GPIO_InitStruct.GPIO_Speed = GPIO_Speed_50MHz;
 		GPIO_InitStruct.GPIO_OType = GPIO_OType_PP;
@@ -84,7 +84,7 @@ void gpioinit()
 
 		// Initialization of GPIO PORT E Pin 10, 13 and Pin 12
 		GPIO_Init(GPIOD,&GPIO_InitStruct);
-		GPIO_ResetBits(GPIOD,GPIO_Pin_5|GPIO_Pin_2);
+		GPIO_ResetBits(GPIOD,GPIO_Pin_5|GPIO_Pin_8);
 
 }
 void gpioinit1()
@@ -312,11 +312,34 @@ void shutarm()
 {
 	GPIO_ResetBits(GPIOE,GPIO_Pin_15);
 	GPIO_ResetBits(GPIOA,GPIO_Pin_11 | GPIO_Pin_10  | GPIO_Pin_8 | GPIO_Pin_7 | GPIO_Pin_6 | GPIO_Pin_5 | GPIO_Pin_4 | GPIO_Pin_3 | GPIO_Pin_2 | GPIO_Pin_0);
-	GPIO_ResetBits(GPIOD,GPIO_Pin_5|GPIO_Pin_2);
+	GPIO_ResetBits(GPIOD,GPIO_Pin_5|GPIO_Pin_8);
 	GPIO_ResetBits(GPIOE,GPIO_Pin_8);
 	TIM_SetCompare4(TIM1, 0);
 	TIM_SetCompare3(TIM2, 0);
 	TIM_SetCompare2(TIM2, 0); //pa1
+
+	/* future pwm pin
+		           //arm
+		       		TIM_SetCompare1(TIM16,2700); // pa6
+		        	TIM_SetCompare1(TIM17,2700); //pa7
+			        TIM_SetCompare2(TIM2,2900); //pa1
+		        	TIM_SetCompare3(TIM2,2900); //pa9
+		        	TIM_SetCompare4(TIM2,2900); // pa3
+		        	TIM_SetCompare4(TIM1,2900); //pe14
+		            TIM_SetCompare3(TIM4, 2700);//pa13
+		            TIM_SetCompare3(TIM3, 2200); //PB0
+	    	       TIM_SetCompare1(TIM4, 2700); //PD12
+	    		   TIM_SetCompare2(TIM4, 2700); //PD13
+	    		   TIM_SetCompare4(TIM4, 2900); //PD15
+			       //wheels
+			        TIM_SetCompare1(TIM1, 0);  //pe9
+			        TIM_SetCompare2(TIM1, 0); //pe11
+			        TIM_SetCompare1(TIM3, 0); //pc6
+			        TIM_SetCompare2(TIM3, 0); //pc7
+		*/
+
+
+
 }
 void Delay(int time)
 {
@@ -395,7 +418,7 @@ void motorcode(long double x, long double y,long double gear,char n)
 	}
 	if(n=='a')
 	{
-		GPIO_SetBits(GPIOB,GPIO_Pin_1);
+		GPIO_SetBits(GPIOB,GPIO_Pin_1); ///PB1 PWM POSSIBLE HAI
 		GPIO_SetBits(GPIOB,GPIO_Pin_3);
 	}
 	else if(n=='b')
@@ -406,7 +429,7 @@ void motorcode(long double x, long double y,long double gear,char n)
 	else if(n=='c')
 	{
 		GPIO_SetBits(GPIOB,GPIO_Pin_5);
-		GPIO_SetBits(GPIOB,GPIO_Pin_8);
+		GPIO_SetBits(GPIOB,GPIO_Pin_8); //PB8 PAR PWM POSSIBLE HAI
 	}
 	else if(n=='d')
 	{
@@ -430,21 +453,21 @@ void armcode(char link)
 		if(link=='A')
 					{
 
-					GPIO_SetBits(GPIOD,GPIO_Pin_2); // linear act 2
+					GPIO_SetBits(GPIOD,GPIO_Pin_8); // gripper
 					GPIO_SetBits(GPIOD,GPIO_Pin_5);
 					}
 				else if(link=='B')
 					{
-						GPIO_SetBits(GPIOD,GPIO_Pin_2); // linear act 2
+						GPIO_SetBits(GPIOD,GPIO_Pin_8); // gripper
 						GPIO_ResetBits(GPIOD,GPIO_Pin_5);
 					}
 				else if(link=='C')
-					{ GPIO_SetBits(GPIOA,GPIO_Pin_4);
+					{ GPIO_SetBits(GPIOA,GPIO_Pin_4); //link1
 					 GPIO_SetBits(GPIOA,GPIO_Pin_5);
 					}
 				else if(link=='D')
 					{
-					 GPIO_SetBits(GPIOA,GPIO_Pin_4);
+					 GPIO_SetBits(GPIOA,GPIO_Pin_4); //link1
 					 GPIO_ResetBits(GPIOA,GPIO_Pin_5);
 					}
 				else if(link=='E')
@@ -472,23 +495,23 @@ void armcode(char link)
 
 				else if(link=='G')
 					{ //gripper
-					GPIO_SetBits(GPIOA,GPIO_Pin_6);
+					GPIO_SetBits(GPIOA,GPIO_Pin_6); //link2
 				 GPIO_SetBits(GPIOA,GPIO_Pin_7);
 
 
 					}
 				else if(link=='H')
 					{
-					GPIO_SetBits(GPIOA,GPIO_Pin_6);
+					GPIO_SetBits(GPIOA,GPIO_Pin_6);  //link2
 					 GPIO_ResetBits(GPIOA,GPIO_Pin_7);
 					}
 				else if(link=='I')
 					{
 					GPIO_SetBits(GPIOE,GPIO_Pin_15); //pitch
-					TIM_SetCompare4(TIM1,2650);
+					TIM_SetCompare4(TIM1,2600);
 								//	GPIO_SetBits(GPIOE,GPIO_Pin_14); //pe14 =pwm
 					GPIO_SetBits(GPIOA,GPIO_Pin_8);
-					TIM_SetCompare3(TIM2,2560);
+					TIM_SetCompare3(TIM2,2600);
 								//	GPIO_SetBits(GPIOA,GPIO_Pin_9);   //pa9 = pwm
 
 
@@ -505,13 +528,13 @@ void armcode(char link)
 
 
 				else if(link=='K')
-						{ //swivel base
+						{                             //swivel base
 							GPIO_SetBits(GPIOA,GPIO_Pin_0); //PA1 PWM
 							TIM_SetCompare2(TIM2,3000);
 							//GPIO_SetBits(GPIOA,GPIO_Pin_1); //PA0 GPIO
 						}
 					else if(link=='L')
-						{
+						{                          // swivel base
 							GPIO_ResetBits(GPIOA,GPIO_Pin_0);
 							TIM_SetCompare2(TIM2,3000);
 							//GPIO_ResetBits(GPIOA,GPIO_Pin_1);
