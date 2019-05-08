@@ -427,7 +427,7 @@ void armcode(char link)
 	if(link=='A')
 				{
 		GPIO_SetBits(GPIOA,GPIO_Pin_0);
-		TIM_SetCompare2(TIM2,2750);                               //vinegar
+		TIM_SetCompare2(TIM2,2750);                               //auger
 		//GPIO_SetBits(GPIOA,GPIO_Pin_1);   //pa1 pwm
 
 				//GPIO_SetBits(GPIOD,GPIO_Pin_2); //
@@ -445,7 +445,7 @@ void armcode(char link)
 			else if(link=='C') //lead screw
 				{
 					GPIO_SetBits(GPIOA,GPIO_Pin_8);  //pa9 pwm
-					GPIO_SetBits(GPIOA,GPIO_Pin_9);
+					GPIO_SetBits(GPIOA,GPIO_Pin_9);         /// lead screw
 
 				}
 			else if(link=='D')
@@ -454,7 +454,7 @@ void armcode(char link)
 					GPIO_SetBits(GPIOA,GPIO_Pin_9);
 				}
 			else if(link=='E')
-				{  //collector
+				{                           //collector plate
 
 				GPIO_SetBits(GPIOE,GPIO_Pin_15);  //pe14 pwm
 				//	GPIO_SetBits(GPIOE,GPIO_Pin_14);
@@ -471,7 +471,7 @@ void armcode(char link)
 
 			else if(link=='G')
 				{
-				GPIO_SetBits(GPIOA,GPIO_Pin_6);  //auger
+				GPIO_SetBits(GPIOA,GPIO_Pin_6);  //bradford
 			 GPIO_SetBits(GPIOA,GPIO_Pin_7);
 
 				}
@@ -496,7 +496,7 @@ void armcode(char link)
 				{
 				GPIO_ResetBits(GPIOA,GPIO_Pin_8);  //pa9 pwm
 				GPIO_SetBits(GPIOA,GPIO_Pin_9);
-
+                                                      //burst drill
 				GPIO_SetBits(GPIOA,GPIO_Pin_0);
 				TIM_SetCompare2(TIM2,5400);
 

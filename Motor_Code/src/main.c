@@ -75,7 +75,7 @@ void gpioinit()
 	GPIO_ResetBits(GPIOE,GPIO_Pin_15|GPIO_Pin_13 | GPIO_Pin_12 | GPIO_Pin_10 |GPIO_Pin_11 | GPIO_Pin_8);
 	GPIO_ResetBits(GPIOB,GPIO_Pin_1 | GPIO_Pin_3 |GPIO_Pin_5 | GPIO_Pin_8);
 
-	GPIO_InitStruct.GPIO_Pin = GPIO_Pin_5|GPIO_Pin_2;
+	GPIO_InitStruct.GPIO_Pin = GPIO_Pin_5|GPIO_Pin_8;
 		GPIO_InitStruct.GPIO_Mode = GPIO_Mode_OUT;
 		GPIO_InitStruct.GPIO_Speed = GPIO_Speed_50MHz;
 		GPIO_InitStruct.GPIO_OType = GPIO_OType_PP;
@@ -83,7 +83,7 @@ void gpioinit()
 
 		// Initialization of GPIO PORT E Pin 10, 13 and Pin 12
 		GPIO_Init(GPIOD,&GPIO_InitStruct);
-		GPIO_ResetBits(GPIOD,GPIO_Pin_5|GPIO_Pin_2);
+		GPIO_ResetBits(GPIOD,GPIO_Pin_5|GPIO_Pin_8);
 
 
 }
@@ -322,7 +322,7 @@ void shut()
 	GPIO_ResetBits(GPIOE,GPIO_Pin_15|GPIO_Pin_13 | GPIO_Pin_12 | GPIO_Pin_10|GPIO_Pin_11 | GPIO_Pin_8);
 	GPIO_ResetBits(GPIOA,GPIO_Pin_11 | GPIO_Pin_10 | GPIO_Pin_8 | GPIO_Pin_7 | GPIO_Pin_6 | GPIO_Pin_5 | GPIO_Pin_4 | GPIO_Pin_3 | GPIO_Pin_2 | GPIO_Pin_0);
 	GPIO_ResetBits(GPIOB,GPIO_Pin_1 | GPIO_Pin_3 | GPIO_Pin_5 | GPIO_Pin_8);
-	GPIO_ResetBits(GPIOD,GPIO_Pin_5|GPIO_Pin_2);
+	GPIO_ResetBits(GPIOD,GPIO_Pin_5|GPIO_Pin_8);
 	GPIO_ResetBits(GPIOC,GPIO_Pin_14|GPIO_Pin_15);
 	//wheel pwm
 	TIM_SetCompare1(TIM1, 0);
@@ -449,12 +449,12 @@ void armcode(char link)
 	if(link=='A')
 				{
 
-				GPIO_SetBits(GPIOD,GPIO_Pin_2); // linear act 2
+				GPIO_SetBits(GPIOD,GPIO_Pin_8); // linear act 2
 				GPIO_SetBits(GPIOD,GPIO_Pin_5);
 				}
 			else if(link=='B')
 				{
-					GPIO_SetBits(GPIOD,GPIO_Pin_2); // linear act 2
+					GPIO_SetBits(GPIOD,GPIO_Pin_8); // linear act 2
 					GPIO_ResetBits(GPIOD,GPIO_Pin_5);
 				}
 			else if(link=='C')
